@@ -3,14 +3,10 @@ account_id = "eabf79add01949143764d93a6f97d54f"
 workers_dev = true
 compatibility_date = "2025-03-23"
 
-# Define the worker entry script
+# Define the worker script entry point
 main = "worker.js"
 
+# Serve static assets (index.html)
 [site]
 bucket = "./"
 entry-point = "."
-
-# Uncomment only if you have a custom domain
-#[env.production]
-#route = "yourdomain.com/*"
-#zone_id = "your-cloudflare-zone-id"
