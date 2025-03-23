@@ -1,8 +1,16 @@
-name = "file-hosting-worker"
+name = "fileio-uploader"
 type = "javascript"
-account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"
+
+account_id = "eabf79add01949143764d93a6f97d54f"
 workers_dev = true
+
+[build]
+command = ""
+
+[site]
+bucket = "./"
+entry-point = "."
 
 [env.production]
 route = "yourdomain.com/*"
-zone_id = "YOUR_CLOUDFLARE_ZONE_ID"
+zone_id = "your-cloudflare-zone-id"
