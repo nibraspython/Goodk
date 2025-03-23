@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload - Cloudflare</title>
+    <title>Upload File to File.io</title>
     <style>
-        body { text-align: center; font-family: Arial, sans-serif; margin: 50px; }
-        input, button { padding: 10px; margin: 10px; }
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input { margin: 10px; }
+        #response { margin-top: 20px; color: green; }
     </style>
 </head>
 <body>
-    <h1>Upload a File</h1>
-    <input type="file" id="fileInput"><br>
+    <h1>Upload File</h1>
+    <input type="file" id="fileInput">
     <button onclick="uploadFile()">Upload</button>
-    <p id="status"></p>
+    
+    <p id="response"></p>
 
     <script>
         async function uploadFile() {
@@ -26,14 +28,12 @@
             const formData = new FormData();
             formData.append("file", fileInput.files[0]);
 
-            const response = await fetch("/upload", {
-                method: "POST",
-                body: formData
-            });
-
+            const response = await fetch("/upload", { method: "POST", body: formData });
             const result = await response.json();
-            document.getElementById("status").innerHTML = 
-                result.fileUrl ? `<a href="${result.fileUrl}" target="_blank">Download File</a>` : "Upload Failed!";
+
+            document.getElementById("response").innerHTML = result.success 
+                ? `✅ File uploaded: <a href="${result.link}" target="_blank">${result.link}</a>` 
+                : `❌ Error: ${result.error}`;
         }
     </script>
 </body>
