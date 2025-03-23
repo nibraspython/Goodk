@@ -3,37 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloudflare Workers File Hosting</title>
+    <title>File Upload - Cloudflare</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background: black; color: white; }
-        input, button { margin: 10px; padding: 10px; }
-        .info { margin-top: 20px; color: lime; }
+        body { text-align: center; font-family: Arial, sans-serif; margin: 50px; }
+        input, button { padding: 10px; margin: 10px; }
     </style>
 </head>
 <body>
-    <h1>Upload Your File</h1>
-    <form id="uploadForm">
-        <input type="file" id="fileInput" required><br>
-        <button type="submit">Upload</button>
-    </form>
-    <p class="info" id="result"></p>
+    <h1>Upload a File</h1>
+    <input type="file" id="fileInput"><br>
+    <button onclick="uploadFile()">Upload</button>
+    <p id="status"></p>
 
     <script>
-        document.getElementById("uploadForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const fileInput = document.getElementById("fileInput").files[0];
-            if (!fileInput) return;
+        async function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            if (!fileInput.files.length) {
+                alert("Please select a file!");
+                return;
+            }
 
-            let formData = new FormData();
-            formData.append("file", fileInput);
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
 
-            let response = await fetch("YOUR_CLOUDFLARE_WORKER_URL", { method: "POST", body: formData });
-            let result = await response.json();
+            const response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
 
-            document.getElementById("result").innerHTML = result.success 
-                ? `✅ File Uploaded: <a href="${result.url}" target="_blank">${result.url}</a>` 
-                : `❌ Upload Failed!`;
-        });
+            const result = await response.json();
+            document.getElementById("status").innerHTML = 
+                result.fileUrl ? `<a href="${result.fileUrl}" target="_blank">Download File</a>` : "Upload Failed!";
+        }
     </script>
 </body>
 </html>
