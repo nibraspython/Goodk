@@ -4,7 +4,7 @@ workers_dev = true
 compatibility_date = "2025-03-23"
 
 # Entry-point script for the Worker
-main = "index.js"
+main = "index.html"
 
 [site]
 bucket = "./"
