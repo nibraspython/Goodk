@@ -1,5 +1,50 @@
+const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File to File.io</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input { margin: 10px; }
+        #response { margin-top: 20px; color: green; }
+    </style>
+</head>
+<body>
+    <h1>Upload File</h1>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Upload</button>
+    
+    <p id="response"></p>
+
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById("fileInput");
+            if (!fileInput.files.length) {
+                alert("Please select a file!");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            const response = await fetch("/upload", { method: "POST", body: formData });
+            const result = await response.json();
+
+            document.getElementById("response").innerHTML = result.success 
+                ? \`✅ File uploaded: <a href="\${result.link}" target="_blank">\${result.link}</a>\`
+                : \`❌ Error: \${result.error}\`;
+        }
+    </script>
+</body>
+</html>`;
+
 export default {
     async fetch(request) {
+        if (request.method === "GET") {
+            return new Response(html, { headers: { "Content-Type": "text/html" } });
+        }
+
         if (request.method === "POST") {
             const formData = await request.formData();
             const file = formData.get("file");
