@@ -1,16 +1,16 @@
 name = "fileio-uploader"
-account_id = "eabf79add01949143764d93a6f97d54f"
+account_id = "your-cloudflare-account-id"
 workers_dev = true
 compatibility_date = "2025-03-23"
 
-# Entry-point script for the Worker
-main = "index.html"
+# Define the worker entry script
+main = "worker.js"
 
 [site]
 bucket = "./"
 entry-point = "."
 
-# Uncomment only if using a custom domain
+# Uncomment only if you have a custom domain
 #[env.production]
 #route = "yourdomain.com/*"
 #zone_id = "your-cloudflare-zone-id"
