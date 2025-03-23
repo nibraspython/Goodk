@@ -1,33 +1,31 @@
 export default {
-    async fetch(request, env, ctx) {
-        const url = new URL(request.url);
-        
-        if (request.method === "POST" && url.pathname === "/upload") {
+    async fetch(request) {
+        if (request.method === "POST") {
             const formData = await request.formData();
             const file = formData.get("file");
-            
+
             if (!file) {
-                return new Response(JSON.stringify({ error: "No file uploaded" }), { status: 400 });
+                return new Response(JSON.stringify({ error: "No file uploaded" }), { status: 400, headers: { "Content-Type": "application/json" } });
             }
+
+            const fileBuffer = await file.arrayBuffer();
+            const blob = new Blob([fileBuffer], { type: file.type });
+
+            const form = new FormData();
+            form.append("file", blob, file.name);
 
             const uploadResponse = await fetch("https://file.io", {
                 method: "POST",
-                body: formData
+                body: form
             });
 
             const jsonResponse = await uploadResponse.json();
 
-            return new Response(JSON.stringify({ fileUrl: jsonResponse.link || null }), {
+            return new Response(JSON.stringify(jsonResponse), {
                 headers: { "Content-Type": "application/json" },
-                status: jsonResponse.success ? 200 : 500
             });
         }
-        
-        // Serve index.html as default root
-        if (url.pathname === "/") {
-            return env.ASSETS.fetch(request);
-        }
-        
-        return new Response("Not Found", { status: 404 });
+
+        return new Response("Send a file using POST request.", { status: 405 });
     }
 };
