@@ -1,5 +1,5 @@
 name = "fileio-uploader"
-account_id = "your-cloudflare-account-id"
+account_id = "eabf79add01949143764d93a6f97d54f"
 workers_dev = true
 compatibility_date = "2025-03-23"
 
