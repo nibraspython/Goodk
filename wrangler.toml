@@ -1,0 +1,8 @@
+name = "file-hosting-worker"
+type = "javascript"
+account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"
+workers_dev = true
+
+[env.production]
+route = "yourdomain.com/*"
+zone_id = "YOUR_CLOUDFLARE_ZONE_ID"
