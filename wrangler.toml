@@ -11,6 +11,7 @@ command = ""
 bucket = "./"
 entry-point = "."
 
-[env.production]
-route = "yourdomain.com/*"
-zone_id = "your-cloudflare-zone-id"
+# Remove this if you're not using a custom domain
+#[env.production]
+#route = "yourdomain.com/*"
+#zone_id = "your-cloudflare-zone-id"
