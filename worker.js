@@ -16,26 +16,35 @@ async function handleRequest(request) {
     } else if (path === "/seeai") {
         return handleAIRequest(prompt);
     } else {
-        return new Response(JSON.stringify({ error: "Invalid endpoint" }), { headers: { "Content-Type": "application/json" }, status: 404 });
+        return new Response(JSON.stringify({ error: "Invalid endpoint" }, null, 2), { 
+            headers: { "Content-Type": "application/json" }, 
+            status: 404 
+        });
     }
 }
 
 /* 🖼️ Image Search Handler */
 async function handleImageSearch(query) {
     if (!query) {
-        return new Response(JSON.stringify({ error: "Search query required" }), { headers: { "Content-Type": "application/json" } });
+        return new Response(JSON.stringify({ error: "Search query required" }, null, 2), { 
+            headers: { "Content-Type": "application/json" } 
+        });
     }
 
     const imageUrls = await searchImages(query, 9);
     const filteredUrls = filterImages(imageUrls);
 
-    return new Response(JSON.stringify(filteredUrls), { headers: { "Content-Type": "application/json" } });
+    return new Response(JSON.stringify(filteredUrls, null, 2), { 
+        headers: { "Content-Type": "application/json" } 
+    });
 }
 
 /* 🤖 AI Processing Handler */
 async function handleAIRequest(prompt) {
     if (!prompt) {
-        return new Response(JSON.stringify({ error: "Prompt required" }), { headers: { "Content-Type": "application/json" } });
+        return new Response(JSON.stringify({ error: "Prompt required" }, null, 2), { 
+            headers: { "Content-Type": "application/json" } 
+        });
     }
 
     try {
@@ -57,11 +66,15 @@ async function handleAIRequest(prompt) {
             support: "@oggyapi"
         };
 
-        return new Response(JSON.stringify(formattedResponse), { headers: { "Content-Type": "application/json" } });
+        return new Response(JSON.stringify(formattedResponse, null, 2), { 
+            headers: { "Content-Type": "application/json" } 
+        });
 
     } catch (error) {
         console.error("AI Request Failed:", error);
-        return new Response(JSON.stringify({ error: "Failed to process request" }), { status: 500 });
+        return new Response(JSON.stringify({ error: "Failed to process request" }, null, 2), { 
+            status: 500 
+        });
     }
 }
 
