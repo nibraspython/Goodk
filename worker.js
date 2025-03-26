@@ -43,7 +43,21 @@ async function handleAIRequest(prompt) {
         const response = await fetch(`https://seaart-ai.apis-bj-devs.workers.dev/?Prompt=${encodeURIComponent(prompt)}`);
         const data = await response.json();
 
-        return new Response(JSON.stringify({ status: "success", result: data }), { headers: { "Content-Type": "application/json" } });
+        // Format the response to match the example
+        const formattedResponse = {
+            status: "success",
+            message: "Image created successfully!",
+            prompt: prompt,
+            result: data.result.map(item => ({
+                width: item.width,
+                height: item.height,
+                url: item.url
+            })),
+            join: "@oggyapi",
+            support: "@oggyapi"
+        };
+
+        return new Response(JSON.stringify(formattedResponse), { headers: { "Content-Type": "application/json" } });
 
     } catch (error) {
         console.error("AI Request Failed:", error);
