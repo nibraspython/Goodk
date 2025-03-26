@@ -15,8 +15,6 @@ async function handleRequest(request) {
         return handleImageSearch(searchQuery);
     } else if (path === "/seeai") {
         return handleAIRequest(prompt);
-    } else if (path === "/get") {
-        return getAIResult(prompt);
     } else {
         return new Response(JSON.stringify({ error: "Invalid endpoint" }), { headers: { "Content-Type": "application/json" }, status: 404 });
     }
@@ -34,34 +32,22 @@ async function handleImageSearch(query) {
     return new Response(JSON.stringify(filteredUrls), { headers: { "Content-Type": "application/json" } });
 }
 
-/* 🤖 AI Processing Handlers */
+/* 🤖 AI Processing Handler */
 async function handleAIRequest(prompt) {
     if (!prompt) {
         return new Response(JSON.stringify({ error: "Prompt required" }), { headers: { "Content-Type": "application/json" } });
     }
 
-    const processingResponse = { message: "Processing your request. Check back later.", status: "processing" };
-
-    fetchAIResponse(prompt);
-
-    return new Response(JSON.stringify(processingResponse), { headers: { "Content-Type": "application/json" } });
-}
-
-function getAIResult(prompt) {
-    if (!resultsCache[prompt]) {
-        return new Response(JSON.stringify({ error: "Result not found. Try again later." }), { headers: { "Content-Type": "application/json" }, status: 404 });
-    }
-    
-    return new Response(JSON.stringify({ status: "success", result: resultsCache[prompt] }), { headers: { "Content-Type": "application/json" } });
-}
-
-async function fetchAIResponse(prompt) {
     try {
+        // Fetch AI-generated response from SeaArt API
         const response = await fetch(`https://seaart-ai.apis-bj-devs.workers.dev/?Prompt=${encodeURIComponent(prompt)}`);
         const data = await response.json();
-        resultsCache[prompt] = data;
+
+        return new Response(JSON.stringify({ status: "success", result: data }), { headers: { "Content-Type": "application/json" } });
+
     } catch (error) {
         console.error("AI Request Failed:", error);
+        return new Response(JSON.stringify({ error: "Failed to process request" }), { status: 500 });
     }
 }
 
