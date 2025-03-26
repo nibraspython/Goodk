@@ -3,7 +3,7 @@ main = "worker.js"
 compatibility_date = "2025-03-26"
 
 [build]
-command = "npm install"
+command = "" # Remove npm install to prevent errors
 
 [env.production]
 workers_dev = true
